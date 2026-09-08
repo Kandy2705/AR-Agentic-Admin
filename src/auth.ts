@@ -2,6 +2,33 @@ import { api, ApiError, client } from './api.js';
 import type { User } from './types.js';
 const KEY = 'agentic-admin-session';
 export function canAccess(user: User | null | undefined): boolean { return !!user && user.role === 'Admin' && user.isActive === true && typeof user.id === 'string' && user.id.length > 0; }
+
+function jwtExpiryMs(accessToken: string): number | null {
+  try {
+    const parts = accessToken.split('.');
+    if (parts.length < 2) return null;
+    const base64 = parts[1].replace(/-/g, '+').replace(/_/g, '/');
+    const padded = base64.padEnd(Math.ceil(base64.length / 4) * 4, '=');
+    const payload = JSON.parse(atob(padded)) as { exp?: unknown };
+    return typeof payload.exp === 'number' && Number.isFinite(payload.exp) ? payload.exp * 1000 : null;
+  } catch { return null; }
+}
+
+function fallbackExpiryMs(expiresAt: string | null): number | null {
+  if (!expiresAt) return null;
+  let value = expiresAt.trim();
+  if (!value) return null;
+  // ASP.NET may serialize DateTime without a zone. Supabase expiry is UTC, so normalize
+  // a zone-less ISO value to UTC instead of letting the browser interpret it as local time.
+  if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/.test(value) && !/(Z|[+-]\d{2}:\d{2})$/i.test(value)) value += 'Z';
+  const parsed = Date.parse(value);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+function expiryMs(accessToken: string, expiresAt: string | null): number | null {
+  return jwtExpiryMs(accessToken) ?? fallbackExpiryMs(expiresAt);
+}
+
 export class Session {
   user: User | null = null;
   message = '';
@@ -10,9 +37,11 @@ export class Session {
   onChange(listener: () => void): void { this.listener = listener; }
   private remember(accessToken: string, expiresAt: string | null): void {
     try { sessionStorage.setItem(KEY, JSON.stringify({ accessToken, expiresAt })); } catch { /* In-memory session still works when storage is blocked. */ }
-    if (expiresAt) {
-      const remaining = new Date(expiresAt).getTime() - Date.now();
-      if (Number.isFinite(remaining)) this.expiry = setTimeout(() => this.clear('Your session has expired. Please sign in again.'), Math.min(Math.max(remaining, 0), 2147483647));
+    clearTimeout(this.expiry);
+    const absoluteExpiry = expiryMs(accessToken, expiresAt);
+    if (absoluteExpiry !== null) {
+      const remaining = absoluteExpiry - Date.now();
+      if (remaining > 0) this.expiry = setTimeout(() => this.clear('Your session has expired. Please sign in again.'), Math.min(remaining, 2147483647));
     }
   }
   async restore(): Promise<void> {
@@ -20,7 +49,8 @@ export class Session {
     try { saved = JSON.parse(sessionStorage.getItem(KEY) || 'null'); } catch { /* invalid session */ }
     if (!saved || typeof saved.accessToken !== 'string') return;
     const expiresAt = typeof saved.expiresAt === 'string' ? saved.expiresAt : null;
-    if (expiresAt && new Date(expiresAt).getTime() <= Date.now()) { this.clear('Your session has expired. Please sign in again.'); return; }
+    const absoluteExpiry = expiryMs(saved.accessToken, expiresAt);
+    if (absoluteExpiry !== null && absoluteExpiry <= Date.now()) { this.clear('Your session has expired. Please sign in again.'); return; }
     client.setToken(saved.accessToken);
     try { await this.refresh(); this.remember(saved.accessToken, expiresAt); } catch { this.clear('Please sign in to verify your account.'); }
   }
@@ -30,7 +60,7 @@ export class Session {
     client.setToken(result.accessToken);
     try {
       await this.refresh();
-      clearTimeout(this.expiry); this.remember(result.accessToken, result.expiresAt);
+      this.remember(result.accessToken, result.expiresAt);
       this.message = ''; this.listener();
     } catch (error) { this.clear(this.message || (error instanceof Error ? error.message : 'Please sign in again.')); throw error; }
   }
