@@ -18,7 +18,13 @@ export function login(root: HTMLElement): void {
   form.addEventListener('submit', async event => {
     event.preventDefault(); if (fieldset.disabled || !form.reportValidity()) return;
     const data = new FormData(form); fieldset.disabled = true; errors.replaceChildren(); form.setAttribute('aria-busy', 'true');
-    try { await session.login(String(data.get('email') || '').trim(), String(data.get('password') || '')); }
+    try {
+      await session.login(String(data.get('email') || '').trim(), String(data.get('password') || ''));
+      if (session.user) {
+        if (location.hash !== '#/dashboard') location.hash = '#/dashboard';
+        else window.dispatchEvent(new HashChangeEvent('hashchange'));
+      }
+    }
     catch (error) { errors.replaceChildren(notice(errorMessage(error), 'danger')); }
     finally { fieldset.disabled = false; form.removeAttribute('aria-busy'); }
   });
