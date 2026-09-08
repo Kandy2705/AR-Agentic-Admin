@@ -1,5 +1,5 @@
 import { API_BASE } from './config.js';
-import type { Answer, AnswerInput, Building, BuildingInput, Category, Chatbox, Dashboard, History, LoginResponse, Page, Params, Question, QuestionInput, User, UserUpdate } from './types.js';
+import type { Answer, AnswerInput, Building, BuildingInput, Category, Chatbox, Dashboard, Floor, FloorInput, FloorUpdate, History, LoginResponse, Page, Params, Question, QuestionInput, Room, RoomInput, RoomUpdate, User, UserUpdate } from './types.js';
 
 export class ApiError extends Error {
   constructor(public status: number, public code: string, message: string) { super(message); this.name = 'ApiError'; }
@@ -77,6 +77,16 @@ export const api = {
   createBuilding: (body: BuildingInput & { userId: string }) => send<Building>('/buildings', 'POST', body),
   updateBuilding: (id: string, body: BuildingInput) => send<Building>(`/buildings/${safeId(id)}`, 'PUT', body),
   deleteBuilding: (id: string) => remove(`/buildings/${safeId(id)}`),
+  floors: (buildingId: string, signal?: AbortSignal) => get<Floor[]>(`/buildings/${safeId(buildingId)}/floors`, signal),
+  floor: (floorId: string, signal?: AbortSignal) => get<Floor>(`/floors/${safeId(floorId)}`, signal),
+  createFloor: (buildingId: string, body: FloorInput) => send<Floor>(`/buildings/${safeId(buildingId)}/floors`, 'POST', body),
+  updateFloor: (floorId: string, body: FloorUpdate) => send<Floor>(`/floors/${safeId(floorId)}`, 'PUT', body),
+  deleteFloor: (floorId: string) => remove(`/floors/${safeId(floorId)}`),
+  rooms: (floorId: string, signal?: AbortSignal) => get<Room[]>(`/floors/${safeId(floorId)}/rooms`, signal),
+  room: (roomId: string, signal?: AbortSignal) => get<Room>(`/rooms/${safeId(roomId)}`, signal),
+  createRoom: (floorId: string, body: RoomInput) => send<Room>(`/floors/${safeId(floorId)}/rooms`, 'POST', body),
+  updateRoom: (roomId: string, body: RoomUpdate) => send<Room>(`/rooms/${safeId(roomId)}`, 'PUT', body),
+  deleteRoom: (roomId: string) => remove(`/rooms/${safeId(roomId)}`),
   categories: (signal?: AbortSignal) => get<Category[]>('/contacts/categories', signal),
   createCategory: (name: string) => send<Category>('/contacts/categories', 'POST', { name }),
   updateCategory: (id: string, name: string) => send<Category>(`/contacts/categories/${safeId(id)}`, 'PUT', { name }),
