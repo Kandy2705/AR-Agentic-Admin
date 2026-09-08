@@ -1,5 +1,5 @@
 export const idOf = (value: { id: string | null }): string => { if (!value.id) throw new Error('API record is missing its ID.'); return value.id; };
-export function nullableNumber(value: string, min: number, max: number): number | null {
+export function nullableNumber(value: string, min = -Number.MAX_VALUE, max = Number.MAX_VALUE): number | null {
   if (!value.trim()) return null;
   const n = Number(value);
   if (!Number.isFinite(n) || n < min || n > max) throw new Error(`Value must be between ${min} and ${max}.`);
