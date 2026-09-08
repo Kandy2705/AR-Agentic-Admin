@@ -19,7 +19,7 @@ const navigation: [string, [string, string, IconName][]][] = [
   ['Account', [['profile', 'Profile', 'profile'], ['password', 'Change password', 'lock']]],
 ];
 function languagePicker(): HTMLElement {
-  const select = h('select', { 'aria-label': 'Language / Ngon ngu', value: locale(), onchange: (event: Event) => { setLanguage((event.target as HTMLSelectElement).value === 'en' ? 'en' : 'vi'); render(); } }, h('option', { value: 'vi' }, 'Ti\u1ebfng Vi\u1ec7t'), h('option', { value: 'en' }, 'English'));
+  const select = h('select', { 'aria-label': 'Language / Ngon ngu', value: locale(), onchange: (event: Event) => { setLanguage((event.target as HTMLSelectElement).value === 'en' ? 'en' : 'vi'); render(); } }, h('option', { value: 'vi' }, 'Tiếng Việt'), h('option', { value: 'en' }, 'English'));
   return h('div', { class: 'language-picker' }, icon('globe'), select);
 }
 function render(): void {
@@ -53,7 +53,6 @@ function render(): void {
     h('a', { class: 'brand', href: '#/dashboard', 'aria-label': 'Agentic AR home' },
       h('img', { src: './mark.svg', alt: '', width: 36, height: 36 }),
       h('span', { class: 'brand-word' }, 'AGENTIC', h('strong', {}, 'AR'))),
-    h('div', { class: 'workspace-label' }, h('span', { class: 'status-dot' }), 'ADMIN WORKSPACE'),
     nav,
     h('div', { class: 'sidebar-bottom' },
       h('div', { class: 'sidebar-note' }, icon('shield'), h('span', {}, t('Session verified'), h('small', {}, 'ADMIN ACCESS'))),
