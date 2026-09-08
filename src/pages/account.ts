@@ -9,7 +9,9 @@ export function login(root: HTMLElement): void {
   const email = field('Email address', 'email', '', { type: 'email', required: true, autocomplete: 'username', maxlength: 254, placeholder: 'admin@example.edu.vn' });
   const password = field('Password', 'password', '', { type: 'password', required: true, autocomplete: 'current-password' });
   const show = h('input', { type: 'checkbox', id: 'show-password' }); show.addEventListener('change', () => { password.querySelector('input')!.type = show.checked ? 'text' : 'password'; });
-  const errors = h('div', { 'aria-live': 'assertive' }, session.message ? notice(session.message, 'danger') : null);
+  const staleMessage = session.message;
+  session.message = '';
+  const errors = h('div', { 'aria-live': 'assertive' }, staleMessage ? notice(staleMessage, 'danger') : null);
   const submit = h('button', { type: 'submit', class: 'button primary login-submit' }, t('Sign in'), icon('arrow'));
   const fieldset = h('fieldset', {}, email, password, h('label', { for: 'show-password', class: 'check-label' }, show, t('Show password')), submit);
   const form = h('form', {}, fieldset, errors);
@@ -25,7 +27,7 @@ export function login(root: HTMLElement): void {
 export function profile(root: HTMLElement, signal: AbortSignal): void {
   const body = h('div'); let reload: () => Promise<void> = async () => {};
   root.append(pageTitle('Profile', 'Your account and security settings.', link('Change password', 'password', 'lock', 'button secondary')), body);
-  reload = remote(body, signal, s => api.me(s), user => panel('Account', h('div', { class: 'detail-body' }, h('div', { class: 'profile-banner' }, h('span', { class: 'avatar large' }, initials(user.name)), h('div', {}, h('h2', {}, text(user.name)), muted(user.email)), badge(text(user.role), 'purple'), badge(user.isActive ? 'Active' : 'Disabled', user.isActive ? 'success' : 'danger')), recordDetails([['ID', h('code', {}, text(user.id))], ['Email', text(user.email)], ['Phone', text(user.phone)], ['Birthday', dateInput(user.birthday) || '\u2014'], ['Gender', text(user.gender)]]), button('Edit profile', () => formDialog('Edit profile', userFields(user), async data => { const result = await api.updateProfile(userPayload(data)); session.user = result; return result; }, () => void reload()), 'edit', 'primary'))));
+  reload = remote(body, signal, s => api.me(s), user => panel('Account', h('div', { class: 'detail-body' }, h('div', { class: 'profile-banner' }, h('span', { class: 'avatar large' }, initials(user.name)), h('div', {}, h('h2', {}, text(user.name)), muted(user.email)), badge(text(user.role), 'purple'), badge(user.isActive ? 'Active' : 'Disabled', user.isActive ? 'success' : 'danger')), recordDetails([['ID', h('code', {}, text(user.id))], ['Email', text(user.email)], ['Phone', text(user.phone)], ['Birthday', dateInput(user.birthday) || '—'], ['Gender', text(user.gender)]]), button('Edit profile', () => formDialog('Edit profile', userFields(user), async data => { const result = await api.updateProfile(userPayload(data)); session.user = result; return result; }, () => void reload()), 'edit', 'primary'))));
 }
 export function password(root: HTMLElement, signal: AbortSignal): void {
   const email = session.user?.email || '';
