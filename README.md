@@ -4,17 +4,18 @@ Trang quản trị (Admin SPA) của hệ thống **Agentic AR**, tức node _Ad
 
 ## Công nghệ
 
-| Hạng mục             | Công nghệ                                                               |
-| -------------------- | ----------------------------------------------------------------------- |
-| UI                   | **React 19** + **TypeScript** (strict)                                  |
-| Build / dev server   | **Vite 7** (có proxy `/__backend` khi dev)                              |
-| Styling              | **Tailwind CSS 4** (design token khai báo trong `src/styles/index.css`) |
-| Routing              | **React Router 7** (hash router, lazy-load từng trang)                  |
-| Server state / cache | **TanStack Query 5**                                                    |
-| Form & validation    | **React Hook Form** + **Zod**                                           |
-| Icon / font          | lucide-react, Inter (self-host)                                         |
-| Test                 | **Vitest** + Testing Library (jsdom)                                    |
-| Chất lượng code      | ESLint 9 (flat config) + Prettier (tự sắp xếp class Tailwind)           |
+| Hạng mục             | Công nghệ                                                                                                |
+| -------------------- | -------------------------------------------------------------------------------------------------------- |
+| UI                   | **React 19** + **TypeScript** (strict)                                                                   |
+| Build / dev server   | **Vite 7** (có proxy `/__backend` khi dev)                                                               |
+| Styling              | **Tailwind CSS 4** (design token khai báo trong `src/styles/index.css`)                                  |
+| Routing              | **React Router 7** (hash router, lazy-load từng trang)                                                   |
+| Server state / cache | **TanStack Query 5**                                                                                     |
+| Form & validation    | **React Hook Form** + **Zod**                                                                            |
+| Icon / font          | lucide-react, Inter (self-host)                                                                          |
+| Bản đồ               | **Leaflet** + react-leaflet, nền OpenStreetMap / Esri (đường phố và vệ tinh), tìm địa chỉ bằng Nominatim |
+| Test                 | **Vitest** + Testing Library (jsdom)                                                                     |
+| Chất lượng code      | ESLint 9 (flat config) + Prettier (tự sắp xếp class Tailwind)                                            |
 
 ## Chạy local
 
@@ -77,11 +78,18 @@ Kiến trúc được đối chiếu với báo cáo trong [docs/ARCHITECTURE.md
 5. Khai báo route trong `src/app/router.tsx` và menu trong `components/layout/navigation.ts`.
 6. Thêm bản dịch vào `src/i18n/vi.ts`. Test sẽ báo nếu còn thiếu key.
 
+## Bản đồ và tọa độ
+
+- **Tòa nhà:** trong form thêm hoặc sửa tòa nhà có bản đồ để chọn vĩ độ/kinh độ. Có bốn cách: bấm hoặc kéo ghim, khoanh vùng quanh viền tòa nhà (lấy tâm của vùng), tìm địa chỉ, hoặc dùng GPS "Vị trí của tôi". Có nút nhảy nhanh tới cơ sở 1 và cơ sở 2.
+- **Phòng:** chọn trên bản đồ sẽ điền **X = Đông** và **Z = Bắc** (đơn vị mét), tính từ điểm của tòa nhà. Cách quy đổi Geodetic → ECEF → ENU → Unity theo mục 2.1.3–2.1.4 của báo cáo nằm trong `src/lib/geo.ts`. **Y** là độ cao, nhập tay.
+- Trang danh sách tòa nhà có chế độ **Bản đồ**. Trang chi tiết hiển thị tòa nhà và vị trí ước tính của các phòng.
+- Toàn bộ tọa độ là **ước tính**, nên chỉnh lại khi khảo sát thực tế. Backend chưa có trường lưu vùng (polygon), nên chỉ lưu điểm tâm.
+
 ## Bảo mật
 
 - Chỉ lưu access token và thời điểm hết hạn trong `sessionStorage` của tab hiện tại. Mật khẩu và refresh token không được lưu.
 - Lỗi 401/403 sẽ đăng xuất ngay. Tài khoản được kiểm tra lại khi focus cửa sổ và định kỳ mỗi 60 giây.
-- Bản build có CSP chặt (`script-src 'self'`, `connect-src` chỉ cho phép origin của API) và không dùng script bên thứ ba. ESLint cấm `dangerouslySetInnerHTML`.
+- Bản build có CSP chặt: `script-src 'self'`; `connect-src` chỉ cho phép origin của API và Nominatim; `img-src` chỉ cho phép tile OpenStreetMap và Esri. Không dùng script bên thứ ba. ESLint cấm `dangerouslySetInnerHTML`.
 - Không hiển thị chi tiết lỗi 5xx của server. File CSV xuất ra được chống formula injection.
 - Các chặn ở UI (không cho tự khóa tài khoản, không cho tự đổi vai trò) **không thay thế** kiểm tra phía server.
 

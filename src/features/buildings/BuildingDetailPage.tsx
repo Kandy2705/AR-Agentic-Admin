@@ -1,5 +1,14 @@
-import { ArrowLeft, ExternalLink, Layers, MapPinned, Pencil, Plus, Trash2 } from 'lucide-react';
-import { useState } from 'react';
+import {
+  ArrowLeft,
+  ExternalLink,
+  Layers,
+  Map as MapIcon,
+  MapPinned,
+  Pencil,
+  Plus,
+  Trash2,
+} from 'lucide-react';
+import { useMemo, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router';
 import { useConfirmedAction } from '@/components/feedback/useConfirmedAction';
 import { Badge } from '@/components/ui/Badge';
@@ -11,7 +20,9 @@ import { DetailList } from '@/components/ui/DetailList';
 import { IconButton } from '@/components/ui/IconButton';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { EmptyState, QueryView } from '@/components/ui/states';
+import { BuildingLocationMap, type MapReference } from '@/features/map';
 import { useI18n } from '@/i18n/context';
+import { fromEnu, latLngOf, unityToEnu, type LatLng } from '@/lib/geo';
 import { idOf, safeHttpUrl } from '@/lib/utils';
 import type { Building, Floor, Room } from '@/types/api';
 import {
@@ -23,6 +34,27 @@ import {
   type FloorWithRooms,
 } from './api';
 import { BuildingDialog, FloorDialog, RoomDialog } from './dialogs';
+
+/** Estimated map positions of rooms from their AR local X (east) / Z (north) — report §2.1.4. */
+function roomReferences(
+  entries: FloorWithRooms[] | undefined,
+  origin: LatLng | null,
+): MapReference[] {
+  if (!origin || !entries) return [];
+  return entries.flatMap(({ floor, rooms }) =>
+    rooms.flatMap((room) =>
+      room.id && room.localX !== null && room.localZ !== null
+        ? [
+            {
+              id: room.id,
+              label: `${room.roomCode ?? '—'} · ${floor.name ?? `#${floor.floorNumber}`}`,
+              position: fromEnu(unityToEnu({ x: room.localX, y: 0, z: room.localZ }), origin),
+            },
+          ]
+        : [],
+    ),
+  );
+}
 
 type Editing =
   | { kind: 'building'; building: Building }
@@ -37,6 +69,10 @@ export default function BuildingDetailPage() {
   const structure = useBuildingStructure(id);
   const [editing, setEditing] = useState<Editing>(null);
   const close = () => setEditing(null);
+  const latitude = building.data?.latitude;
+  const longitude = building.data?.longitude;
+  const origin = useMemo(() => latLngOf(latitude, longitude), [latitude, longitude]);
+  const rooms = useMemo(() => roomReferences(structure.data, origin), [structure.data, origin]);
 
   return (
     <>
@@ -59,6 +95,44 @@ export default function BuildingDetailPage() {
           />
         )}
       </QueryView>
+
+      {building.data && (
+        <Card className="mt-6">
+          <CardHeader
+            title={
+              <span className="flex items-center gap-2">
+                <MapIcon className="size-5 text-brand-500" aria-hidden />
+                {t('Location on map')}
+              </span>
+            }
+            description={t('Building point and estimated room positions (from AR local X/Z).')}
+            actions={
+              <Button
+                icon={<MapPinned />}
+                onClick={() =>
+                  building.data && setEditing({ kind: 'building', building: building.data })
+                }
+              >
+                {t(origin ? 'Move on map' : 'Pick on map')}
+              </Button>
+            }
+          />
+          <CardBody>
+            {origin ? (
+              <BuildingLocationMap
+                position={origin}
+                label={building.data.name ?? ''}
+                rooms={rooms}
+              />
+            ) : (
+              <EmptyState
+                title="No coordinates yet"
+                description="Pick the building on the campus map to set its latitude and longitude."
+              />
+            )}
+          </CardBody>
+        </Card>
+      )}
 
       <Card className="mt-6">
         <CardHeader
@@ -106,7 +180,15 @@ export default function BuildingDetailPage() {
         <FloorDialog buildingId={id} floor={editing.floor} onClose={close} />
       )}
       {editing?.kind === 'room' && (
-        <RoomDialog buildingId={id} floorId={editing.floorId} room={editing.room} onClose={close} />
+        <RoomDialog
+          buildingId={id}
+          floorId={editing.floorId}
+          room={editing.room}
+          origin={origin}
+          originLabel={building.data?.name ?? undefined}
+          references={rooms.filter((reference) => reference.id !== editing.room?.id)}
+          onClose={close}
+        />
       )}
     </>
   );

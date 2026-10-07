@@ -44,8 +44,10 @@ function contentSecurityPolicy(connectSrc: string): Plugin {
     "default-src 'self'",
     "script-src 'self'",
     "style-src 'self'",
-    "img-src 'self' data:",
-    `connect-src ${connectSrc}`,
+    // Map tiles: OpenStreetMap and Esri (street + World Imagery satellite).
+    "img-src 'self' data: https://tile.openstreetmap.org https://server.arcgisonline.com",
+    // Address search: OpenStreetMap Nominatim.
+    `connect-src ${connectSrc} https://nominatim.openstreetmap.org`,
     "font-src 'self'",
     "object-src 'none'",
     "base-uri 'self'",
