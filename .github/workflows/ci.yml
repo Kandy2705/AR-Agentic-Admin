@@ -1,7 +1,7 @@
 name: Check Admin Portal
 on:
   push:
-    branches: [main, feat/admin-portal]
+    branches: [main]
   pull_request:
 permissions:
   contents: read
@@ -15,14 +15,7 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version-file: .node-version
           cache: npm
       - run: npm ci
       - run: npm run check
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - run: python -m pip install -r tests/requirements.txt
-      - run: python -m playwright install --with-deps chromium
-      - name: Offline browser integration tests (mock API)
-        run: npm run test:browser

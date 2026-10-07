@@ -1,0 +1,298 @@
+/**
+ * Vietnamese dictionary. Keys are the English source strings used in the code.
+ * `src/i18n/vi.test.ts` fails if a translated literal in the code has no entry here.
+ */
+export const vi: Record<string, string> = {
+  // Navigation & layout
+  Overview: 'Tổng quan',
+  Management: 'Quản lý',
+  'User support': 'Hỗ trợ người dùng',
+  'AI management': 'Quản lý AI',
+  Account: 'Tài khoản',
+  Dashboard: 'Tổng quan',
+  Users: 'Người dùng',
+  Buildings: 'Tòa nhà',
+  Questions: 'Câu hỏi',
+  Categories: 'Danh mục',
+  'Chat histories': 'Lịch sử chat',
+  Profile: 'Hồ sơ',
+  'Change password': 'Đổi mật khẩu',
+  Logout: 'Đăng xuất',
+  'Admin workspace': 'Không gian quản trị',
+  Administrator: 'Quản trị viên',
+  'Session verified': 'Đã xác thực',
+  'Main navigation': 'Điều hướng chính',
+  'Toggle navigation': 'Ẩn/hiện thanh điều hướng',
+  'Close navigation': 'Đóng thanh điều hướng',
+  'Skip to content': 'Bỏ qua tới nội dung',
+  Breadcrumb: 'Đường dẫn trang',
+  Dismiss: 'Đóng thông báo',
+  'Page not found': 'Không tìm thấy trang',
+  'The page you requested does not exist.': 'Trang bạn yêu cầu không tồn tại.',
+
+  // Common actions
+  Search: 'Tìm kiếm',
+  'Search by name or email': 'Tìm theo tên hoặc email',
+  'Search records': 'Tìm trong danh sách',
+  'Apply filters': 'Lọc dữ liệu',
+  Refresh: 'Làm mới',
+  'Save changes': 'Lưu thay đổi',
+  Cancel: 'Hủy',
+  Close: 'Đóng',
+  Delete: 'Xóa',
+  View: 'Xem',
+  'View all': 'Xem tất cả',
+  Details: 'Chi tiết',
+  Actions: 'Thao tác',
+  Back: 'Quay lại',
+  Continue: 'Tiếp tục',
+  Retry: 'Thử lại',
+  'Export CSV': 'Xuất CSV',
+  'Export report': 'Xuất báo cáo',
+  Previous: 'Trước',
+  Next: 'Sau',
+  Page: 'Trang',
+  Pagination: 'Phân trang',
+  '{count} records': '{count} bản ghi',
+  Loading: 'Đang tải',
+
+  // Feedback
+  'Saved successfully.': 'Đã lưu thành công.',
+  'Deleted successfully.': 'Đã xóa thành công.',
+  'This action cannot be undone.': 'Thao tác này không thể hoàn tác.',
+  'No records found': 'Chưa có dữ liệu',
+  'No records match your filters.': 'Không có dữ liệu phù hợp bộ lọc.',
+
+  // Fields
+  Name: 'Tên',
+  Email: 'Email',
+  Phone: 'Số điện thoại',
+  Birthday: 'Ngày sinh',
+  Gender: 'Giới tính',
+  Role: 'Vai trò',
+  Status: 'Trạng thái',
+  Active: 'Hoạt động',
+  Disabled: 'Đã khóa',
+  'All roles': 'Tất cả vai trò',
+  'All statuses': 'Tất cả trạng thái',
+  'All categories': 'Tất cả danh mục',
+  'User ID': 'ID người dùng',
+  Customer: 'Khách hàng',
+  Employee: 'Nhân viên',
+  Admin: 'Quản trị viên',
+  Content: 'Nội dung',
+  Created: 'Ngày tạo',
+  Description: 'Mô tả',
+  Metric: 'Chỉ số',
+  Value: 'Giá trị',
+
+  // Dashboard
+  'A clear view of your campus, community and conversations.':
+    'Theo dõi tòa nhà, người dùng và các cuộc trò chuyện.',
+  'Welcome back': 'Chào mừng trở lại',
+  'One workspace to keep your campus connected.':
+    'Một không gian quản trị, kết nối toàn khuôn viên.',
+  'Total users': 'Tổng người dùng',
+  'Total buildings': 'Tổng tòa nhà',
+  'Total questions': 'Tổng câu hỏi',
+  Conversations: 'Cuộc trò chuyện',
+  Answers: 'Câu trả lời',
+  Messages: 'Tin nhắn',
+  'Active users': 'Người dùng hoạt động',
+  'Disabled users': 'Người dùng bị khóa',
+  'Recent questions': 'Câu hỏi gần đây',
+  'Recent conversations': 'Trò chuyện gần đây',
+  'Last refreshed': 'Lần tải gần nhất',
+
+  // Users
+  'Manage account access and user profiles.': 'Quản lý quyền truy cập và hồ sơ người dùng.',
+  'Edit user': 'Chỉnh sửa người dùng',
+  'User details': 'Chi tiết người dùng',
+  'Profile and account permissions.': 'Hồ sơ và quyền tài khoản.',
+  'Enable account': 'Mở khóa tài khoản',
+  'Disable account': 'Khóa tài khoản',
+  'Change role?': 'Thay đổi vai trò?',
+  'Changing a role changes access permissions.': 'Thay đổi vai trò sẽ thay đổi quyền truy cập.',
+  'The user will lose application access.': 'Người dùng sẽ không thể truy cập ứng dụng.',
+  'Application access will be restored.': 'Quyền truy cập ứng dụng sẽ được khôi phục.',
+  'You cannot disable your own account here.': 'Bạn không thể tự khóa tài khoản tại đây.',
+  'Self role changes are disabled in this portal.': 'Trang quản trị không cho phép tự đổi vai trò.',
+  'An empty birthday keeps the current value in this backend.':
+    'Để trống ngày sinh sẽ giữ nguyên giá trị hiện tại trên backend.',
+
+  // Buildings, floors, rooms
+  'Manage campus destinations, floors, rooms and geographical coordinates.':
+    'Quản lý tòa nhà, tầng, phòng và tọa độ trong khuôn viên.',
+  'Add building': 'Thêm tòa nhà',
+  'Edit building': 'Chỉnh sửa tòa nhà',
+  'Building details': 'Chi tiết tòa nhà',
+  'Delete building?': 'Xóa tòa nhà?',
+  'Campus destination, floor and room information.': 'Thông tin tòa nhà, tầng và phòng.',
+  Latitude: 'Vĩ độ',
+  Longitude: 'Kinh độ',
+  Coordinates: 'Tọa độ',
+  'Open map': 'Mở bản đồ',
+  'Coordinates are not available.': 'Chưa có tọa độ.',
+  'Coordinates are optional. Floors and rooms can be managed from the building detail page.':
+    'Tọa độ không bắt buộc. Tầng và phòng được quản lý tại trang chi tiết tòa nhà.',
+  'Search and pagination on this page apply to the list returned by the existing API.':
+    'Tìm kiếm và phân trang tại đây áp dụng trên danh sách API trả về.',
+  'Floors & rooms': 'Tầng & phòng',
+  'Indoor navigation structure and AR local coordinates.':
+    'Cấu trúc dẫn đường trong nhà và tọa độ AR cục bộ.',
+  'Add floor': 'Thêm tầng',
+  'Edit floor': 'Chỉnh sửa tầng',
+  'Delete floor': 'Xóa tầng',
+  'Delete floor?': 'Xóa tầng?',
+  'Floor {number}': 'Tầng {number}',
+  'Floor number': 'Số tầng',
+  'Ground floor': 'Tầng trệt',
+  'Floor plan': 'Sơ đồ tầng',
+  'Floor plan URL': 'URL sơ đồ tầng',
+  'This also deletes rooms on this floor.': 'Thao tác này cũng xóa các phòng trên tầng.',
+  'No floors yet': 'Chưa có tầng',
+  'No floors have been added for this building yet.': 'Tòa nhà này chưa có tầng nào.',
+  '{count} rooms': '{count} phòng',
+  Rooms: 'Phòng',
+  Room: 'Phòng',
+  'Room code': 'Mã phòng',
+  'Room type': 'Loại phòng',
+  Classroom: 'Phòng học',
+  Type: 'Loại',
+  'AR local position': 'Vị trí AR cục bộ',
+  Verification: 'Xác minh',
+  Verified: 'Đã xác minh',
+  Unverified: 'Chưa xác minh',
+  Source: 'Nguồn',
+  'Source URL': 'URL nguồn',
+  'Add room': 'Thêm phòng',
+  'Edit room': 'Chỉnh sửa phòng',
+  'Delete room': 'Xóa phòng',
+  'Delete room?': 'Xóa phòng?',
+  'No rooms on this floor yet.': 'Tầng này chưa có phòng.',
+
+  // Support
+  'Organize the topics used for student support.': 'Sắp xếp các chủ đề hỗ trợ sinh viên.',
+  'Add category': 'Thêm danh mục',
+  'Edit category': 'Chỉnh sửa danh mục',
+  'Delete category?': 'Xóa danh mục?',
+  Category: 'Danh mục',
+  Uncategorized: 'Chưa phân loại',
+  'Existing references may prevent deletion.':
+    'Dữ liệu liên quan có thể khiến thao tác xóa bị từ chối.',
+  '{count} questions use this category; the server may reject the deletion.':
+    '{count} câu hỏi đang dùng danh mục này; máy chủ có thể từ chối thao tác xóa.',
+  'Review student questions and manage their answers.':
+    'Xem câu hỏi của sinh viên và quản lý câu trả lời.',
+  'Add question': 'Thêm câu hỏi',
+  'Edit question': 'Chỉnh sửa câu hỏi',
+  'Delete question?': 'Xóa câu hỏi?',
+  'Question details': 'Chi tiết câu hỏi',
+  'Read the question and manage its answer thread.':
+    'Xem nội dung câu hỏi và các câu trả lời liên quan.',
+  'Add answer': 'Thêm trả lời',
+  'Edit answer': 'Chỉnh sửa trả lời',
+  'Delete answer?': 'Xóa câu trả lời?',
+  'Author ID': 'ID người trả lời',
+  'No answers yet': 'Chưa có trả lời',
+  'Write the first answer to this question.': 'Viết câu trả lời đầu tiên cho câu hỏi này.',
+  'The backend does not expose a workflow status for questions. No status is inferred or written by this portal.':
+    'Backend chưa có trạng thái xử lý câu hỏi. Giao diện không tự suy ra hay lưu trạng thái.',
+
+  // Chats
+  'Review conversations across the campus platform.': 'Tra cứu các cuộc trò chuyện trên hệ thống.',
+  'Chat content may contain personal information. Access it only for authorized support tasks.':
+    'Nội dung chat có thể chứa thông tin cá nhân. Chỉ truy cập cho công việc hỗ trợ được phép.',
+  Conversation: 'Cuộc trò chuyện',
+  'From date': 'Từ ngày',
+  'To date': 'Đến ngày',
+  'Filter by this user': 'Lọc theo người dùng này',
+  Participant: 'Người gửi',
+  'Delete conversation': 'Xóa cuộc trò chuyện',
+  'Delete conversation?': 'Xóa cuộc trò chuyện?',
+  'All messages in this conversation will be deleted.':
+    'Tất cả tin nhắn trong cuộc trò chuyện sẽ bị xóa.',
+  'Delete message': 'Xóa tin nhắn',
+  'Delete message?': 'Xóa tin nhắn?',
+  'No messages yet': 'Chưa có tin nhắn',
+  'This conversation has no messages.': 'Cuộc trò chuyện chưa có tin nhắn.',
+
+  // Account
+  'Your account and security settings.': 'Thông tin tài khoản và cài đặt bảo mật.',
+  'Edit profile': 'Chỉnh sửa hồ sơ',
+  'Verify your email and set a new password.': 'Xác minh email và đặt mật khẩu mới.',
+  'Account security': 'Bảo mật tài khoản',
+  'OTP code': 'Mã OTP',
+  'Send OTP': 'Gửi mã OTP',
+  'Old password': 'Mật khẩu hiện tại',
+  'New password': 'Mật khẩu mới',
+  'Confirm password': 'Xác nhận mật khẩu',
+  'OTP sent. Check your email.': 'Đã gửi mã OTP. Hãy kiểm tra email.',
+  'The OTP could not be sent. Please try again.': 'Chưa gửi được OTP. Hãy thử lại.',
+  'Password changed. Please sign in again.': 'Đã đổi mật khẩu. Hãy đăng nhập lại.',
+  'The portal signs out locally after a password change. Server-side session revocation is managed by the backend.':
+    'Trang quản trị sẽ đăng xuất sau khi đổi mật khẩu. Việc thu hồi phiên trên máy chủ do backend xử lý.',
+
+  // Login
+  'Sign in': 'Đăng nhập',
+  'Email address': 'Địa chỉ email',
+  Password: 'Mật khẩu',
+  'Show password': 'Hiện mật khẩu',
+  'A connected campus.': 'Khuôn viên kết nối.',
+  'One clear view.': 'Quản trị tập trung.',
+  'Your workspace for campus destinations, student support and AI conversations.':
+    'Quản lý tòa nhà, hỗ trợ sinh viên và các cuộc trò chuyện AI tại một nơi.',
+  'Sign in with an active Admin account to continue.':
+    'Đăng nhập bằng tài khoản Admin đang hoạt động để tiếp tục.',
+  'Your session is stored in this tab only. No password is stored.':
+    'Phiên đăng nhập chỉ được lưu trong tab này. Mật khẩu không được lưu.',
+
+  // Validation
+  'Name is required.': 'Vui lòng nhập tên.',
+  'Content is required.': 'Vui lòng nhập nội dung.',
+  'Email is required.': 'Vui lòng nhập email.',
+  'Password is required.': 'Vui lòng nhập mật khẩu.',
+  'OTP code is required.': 'Vui lòng nhập mã OTP.',
+  'Room code is required.': 'Vui lòng nhập mã phòng.',
+  'Floor number is required.': 'Vui lòng nhập số tầng.',
+  'Floor number must be an integer.': 'Số tầng phải là số nguyên.',
+  'Enter a valid email address.': 'Email không hợp lệ.',
+  'Enter a valid phone number.': 'Số điện thoại không hợp lệ.',
+  'Enter a valid number in range.': 'Giá trị số không hợp lệ hoặc vượt giới hạn.',
+  'Enter a valid http(s) URL.': 'URL phải bắt đầu bằng http:// hoặc https://.',
+  'Too long (max 1000 characters).': 'Quá dài (tối đa 1000 ký tự).',
+  'Birthday cannot be in the future.': 'Ngày sinh không được ở tương lai.',
+  'Password must be at least 8 characters.': 'Mật khẩu phải có ít nhất 8 ký tự.',
+  'The passwords do not match.': 'Mật khẩu xác nhận không khớp.',
+  'Choose a new password different from the old password.':
+    'Hãy chọn mật khẩu mới khác mật khẩu cũ.',
+  'The start date must not be after the end date.': 'Ngày bắt đầu không được sau ngày kết thúc.',
+
+  // Session & API errors
+  'This account does not have active Admin access.':
+    'Tài khoản này không có quyền Admin đang hoạt động.',
+  'Your account no longer has permission for this page.':
+    'Tài khoản không còn quyền truy cập trang này.',
+  'Your session has expired or your account is disabled. Please sign in again.':
+    'Phiên đăng nhập hết hạn hoặc tài khoản bị khóa. Hãy đăng nhập lại.',
+  'Your session has expired. Please sign in again.':
+    'Phiên đăng nhập đã hết hạn. Hãy đăng nhập lại.',
+  'Please sign in to verify your account.': 'Hãy đăng nhập để xác minh tài khoản.',
+  'Please sign in.': 'Vui lòng đăng nhập.',
+  'Login response did not include an access token.': 'Phản hồi đăng nhập không có access token.',
+  'Cannot connect to the API. Check network, backend deployment and CORS.':
+    'Không kết nối được API. Kiểm tra mạng, bản triển khai backend và CORS.',
+  'Resource or API endpoint not found. Verify the backend deployment.':
+    'Không tìm thấy dữ liệu hoặc API. Hãy kiểm tra bản triển khai backend.',
+  'The server could not complete this request. Please try again.':
+    'Máy chủ chưa xử lý được yêu cầu. Hãy thử lại.',
+  'The API took too long to respond.': 'API phản hồi quá lâu. Hãy thử lại.',
+  'API did not return JSON. Check the API URL and deployment.':
+    'API không trả về JSON. Hãy kiểm tra URL API và bản triển khai.',
+  'Unexpected API response.': 'Phản hồi API không hợp lệ.',
+  'API response does not match the expected contract.': 'Phản hồi API không đúng hợp đồng dữ liệu.',
+  'The server did not delete the record.': 'Máy chủ chưa xóa bản ghi.',
+  'Request failed.': 'Yêu cầu thất bại.',
+  'Something went wrong. Please try again.': 'Đã xảy ra lỗi. Hãy thử lại.',
+  'API record is missing its ID.': 'Bản ghi API thiếu ID.',
+};
