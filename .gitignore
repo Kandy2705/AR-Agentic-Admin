@@ -1,8 +1,10 @@
 node_modules/
 dist/
+coverage/
 .env
 .env.*
 !.env.example
 artifacts/
 __pycache__/
 .DS_Store
+*.tsbuildinfo

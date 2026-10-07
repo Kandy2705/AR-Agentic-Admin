@@ -1,101 +1,97 @@
 # AR-Agentic-Admin
 
-A complete, responsive administration frontend for **Agentic AR**. The production app talks directly to the existing .NET API; it does not contain demo data or a mock login.
+Trang quản trị (Admin SPA) của hệ thống **Agentic AR**, tức node _Admin Client_ trong Deployment Diagram (Hình 5.3). Ứng dụng gọi trực tiếp backend .NET qua HTTPS và không chứa dữ liệu demo hay tài khoản mẫu.
 
-Built with strict TypeScript, native browser ES modules, semantic HTML, and CSS. There are **no runtime JavaScript dependencies**. TypeScript 5.8.3 is the only npm development dependency. The UI provides Vietnamese and English labels, a dark sidebar, a light workspace, and real Font Awesome SVG icons.
+## Công nghệ
 
-## Run locally
+| Hạng mục             | Công nghệ                                                               |
+| -------------------- | ----------------------------------------------------------------------- |
+| UI                   | **React 19** + **TypeScript** (strict)                                  |
+| Build / dev server   | **Vite 7** (có proxy `/__backend` khi dev)                              |
+| Styling              | **Tailwind CSS 4** (design token khai báo trong `src/styles/index.css`) |
+| Routing              | **React Router 7** (hash router, lazy-load từng trang)                  |
+| Server state / cache | **TanStack Query 5**                                                    |
+| Form & validation    | **React Hook Form** + **Zod**                                           |
+| Icon / font          | lucide-react, Inter (self-host)                                         |
+| Test                 | **Vitest** + Testing Library (jsdom)                                    |
+| Chất lượng code      | ESLint 9 (flat config) + Prettier (tự sắp xếp class Tailwind)           |
 
-Use Node.js 22 or newer:
+## Chạy local
+
+Cần Node.js 22.18 trở lên.
 
 ```bash
 npm ci
 cp .env.example .env
-npm run dev
+npm run dev          # http://localhost:5173, gọi API thật qua proxy, không cần CORS
+npm run dev:mock     # chạy offline với API giả (dữ liệu hư cấu, mật khẩu "wrong" sẽ báo lỗi)
 ```
 
-Open `http://localhost:5173`. The development script rebuilds on source changes; refresh the browser after a rebuild. Do not open `index.html` directly with `file://`.
-
-`.env` contains **only a public API origin**:
+File `.env` chỉ chứa **địa chỉ API công khai**:
 
 ```dotenv
 ADMIN_API_BASE_URL=https://ar-agentic-bscygtc7gdf7b4ga.southeastasia-01.azurewebsites.net
 ```
 
-No account is bundled. Use an existing, active **Admin** account. Login is followed by `GET /api/v1/users/me`; Customer, Employee, inactive, or unidentified accounts cannot enter this portal.
+Đăng nhập bằng một tài khoản **Admin** đang hoạt động. Sau khi đăng nhập, ứng dụng gọi `GET /api/v1/users/me`. Tài khoản Customer, Employee, tài khoản bị khóa hoặc không xác định được sẽ không vào được.
 
-**Backend prerequisites:** deploy the updated BE, apply its `is_active` migration, bootstrap an Admin account, rotate exposed server credentials, and allow the frontend origin in backend CORS. These are not performed by this frontend repository.
+## Scripts
 
-For local development, one allowed origin should be exactly `http://localhost:5173`. For a Pages deployment under `https://Kandy2705.github.io/AR-Agentic-Admin/`, the CORS origin is **`https://kandy2705.github.io`**, without a repository path or trailing slash. Never add Supabase service-role keys, Gmail passwords, or chatbot secrets to this frontend.
+| Lệnh                              | Việc làm                                                      |
+| --------------------------------- | ------------------------------------------------------------- |
+| `npm run dev`                     | Dev server, hot reload                                        |
+| `npm run dev:mock`                | Dev server và API giả offline                                 |
+| `npm run build`                   | Typecheck rồi build ra `dist/`                                |
+| `npm run preview`                 | Phục vụ thư mục `dist/` tại http://localhost:4173             |
+| `npm run lint` / `npm run format` | ESLint / Prettier                                             |
+| `npm test`                        | Unit test và integration test (Vitest)                        |
+| `npm run check`                   | Chạy toàn bộ: lint, format, typecheck, test, build (giống CI) |
 
-## Implemented screens
+## Cấu trúc thư mục
 
-| Route | Capability |
-| --- | --- |
-| `#/login` | Email/password login, active Admin verification, safe session handling |
-| `#/dashboard` | Nine backend counts, recent questions and conversations, independent loading/errors |
-| `#/users` and `#/users/:id` | Server pagination, search, role/status filters, profile/role edit, enable/disable |
-| `#/buildings` and `#/buildings/:id` | List/search, create/edit/delete, coordinates, optional external map link |
-| `#/questions` and `#/questions/:id` | Category filter, CRUD, question details, answer create/edit/delete |
-| `#/categories` | Category create/edit/delete and local search/pagination |
-| `#/chats` and `#/chats/:id` | System-wide histories, user/date filters, messages, confirmed deletion |
-| `#/profile` | Current account and self-service profile editing |
-| `#/password` | Request OTP, current/new password, confirmation, sign out after success |
-
-Destructive actions require confirmation. Role changes require a separate confirmation. The UI prevents accidental self-disabling and self-role changes, but these are **not substitutes for server-side protections**, including protection of the last active Admin.
-
-The implementation deliberately does not invent image upload, floor/room management, question workflow statuses, user creation/deletion, token refresh, or analytics endpoints that the backend does not expose.
-
-## Build and checks
-
-```bash
-npm run typecheck
-npm test
-npm run build
-npm run preview
+```text
+src/
+  app/            App, providers, router, route guards
+  components/
+    layout/       Sidebar, Topbar, AppLayout, navigation config
+    ui/           Button, Card, Dialog, DataTable, Pagination, form fields…
+    feedback/     Toast, Confirm dialog, useNotify, useConfirmedAction
+  features/       Mỗi module một thư mục: Page + api.ts (hooks) + schema.ts + dialogs
+    auth/  dashboard/  users/  buildings/  support/  chats/  account/
+  services/       Remote API client theo module và query keys
+  lib/            http/api-client.ts, utils, csv, validation, errors
+  hooks/          useDialogForm, useLocalTable
+  i18n/           I18nProvider, từ điển tiếng Việt (test kiểm tra không thiếu key)
+  types/api.ts    DTO khớp với backend
+  test/           setup và mock backend
 ```
 
-`dist/` is the deployable static site. Hash routing and relative asset URLs support repository subpaths without server rewrite rules. Only the configured public API origin is emitted into `dist/config.js`; `.env`, tests, fixtures, and backend secrets are not copied into the site.
+Kiến trúc được đối chiếu với báo cáo trong [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md). Hợp đồng API và các giới hạn của backend nằm trong [docs/API_CONTRACT.md](docs/API_CONTRACT.md).
 
-Optional offline browser integration suite:
+### Thêm một màn hình mới
 
-```bash
-python3 -m pip install -r tests/requirements.txt
-python3 -m playwright install --with-deps chromium
-npm run build
-npm run test:browser
-```
+1. Thêm hàm gọi API vào `src/services/<module>.service.ts` và query key vào `query-keys.ts`.
+2. Tạo `src/features/<module>/api.ts` chứa các hook `useQuery`/`useMutation`.
+3. Tạo `schema.ts`: một zod schema, kèm hàm map từ form sang payload.
+4. Tạo trang `<Name>Page.tsx` (export default), ghép từ `components/ui`.
+5. Khai báo route trong `src/app/router.tsx` và menu trong `components/layout/navigation.ts`.
+6. Thêm bản dịch vào `src/i18n/vi.ts`. Test sẽ báo nếu còn thiếu key.
 
-These browser tests use isolated, fictional API fixtures and an **offline test-only module harness**. They test UI interactions and payloads, not the deployed Azure service or real account permissions. See [verification details](docs/VERIFICATION.md).
+## Bảo mật
+
+- Chỉ lưu access token và thời điểm hết hạn trong `sessionStorage` của tab hiện tại. Mật khẩu và refresh token không được lưu.
+- Lỗi 401/403 sẽ đăng xuất ngay. Tài khoản được kiểm tra lại khi focus cửa sổ và định kỳ mỗi 60 giây.
+- Bản build có CSP chặt (`script-src 'self'`, `connect-src` chỉ cho phép origin của API) và không dùng script bên thứ ba. ESLint cấm `dangerouslySetInnerHTML`.
+- Không hiển thị chi tiết lỗi 5xx của server. File CSV xuất ra được chống formula injection.
+- Các chặn ở UI (không cho tự khóa tài khoản, không cho tự đổi vai trò) **không thay thế** kiểm tra phía server.
 
 ## Deploy
 
-A manual GitHub Pages workflow is included. After merging the implementation to `main`:
+`dist/` là site tĩnh. Hash routing và đường dẫn tương đối (`base: './'`) giúp site chạy được dưới sub-path của GitHub Pages mà không cần rewrite rule.
 
-1. In repository **Settings -> Pages**, choose **GitHub Actions** as the source.
-2. Optionally set repository variable `ADMIN_API_BASE_URL` to the API origin; the workflow otherwise uses the Azure origin above.
-3. Add the actual frontend origin to Azure `Cors__AllowedOrigins__N`, and restart/redeploy the backend as needed.
-4. Run **Actions -> Deploy Pages (manual) -> Run workflow** on `main`.
+1. Vào **Settings → Pages**, chọn **GitHub Actions**.
+2. Có thể đặt biến repository `ADMIN_API_BASE_URL`.
+3. Thêm origin của frontend vào `Cors__AllowedOrigins__N` trên Azure. Với Pages, origin là `https://kandy2705.github.io`.
+4. Chạy **Actions → Deploy Pages (manual)** trên nhánh `main`.
 
-Deployment is intentionally **not automatic on push**. This repository does not enable Pages, change Azure/Supabase settings, or deploy the backend. Public static assets do not grant access to private API data; runtime authorization must remain enforced by the backend.
-
-For another static host, publish the contents of `dist/`. Prefer HTTP security headers at the host (including `frame-ancestors 'none'`); the page already has a restrictive meta CSP. After changing the API origin, rebuild so both configuration and CSP are updated.
-
-## Structure
-
-```text
-src/api.ts             Endpoint paths, exact wire payloads, envelope/error handling
-src/auth.ts            Tab-scoped session, Admin guard, expiry and revalidation
-src/types.ts           DTOs derived from the backend source
-src/main.ts            Hash router and responsive application shell
-src/pages/             Feature screens
-src/ui.ts              Safe DOM helpers, forms, dialogs, tables, loading states
-src/i18n.ts            Vietnamese/English UI text and formatting
-src/icons.ts           Attributed Font Awesome SVG paths (no font files)
-public/                HTML, CSS and brand mark
-scripts/               Build, local development and static preview
-tests/                Unit and offline browser integration tests
-docs/                 API contract notes, verification and live checklist
-```
-
-See [API contract and limitations](docs/API_CONTRACT.md), [verification and live smoke checklist](docs/VERIFICATION.md), and [third-party attribution](THIRD_PARTY_NOTICES.md).
+Mỗi lần đổi địa chỉ API phải build lại để cập nhật cả cấu hình lẫn CSP.
