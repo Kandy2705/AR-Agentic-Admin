@@ -33,21 +33,21 @@ Mỗi lớp chỉ phụ thuộc lớp ngay dưới nó. Page không gọi `fetch
 
 ## 2. Độ phủ use case (Hình 3.5, mục 3.3.2)
 
-| Use case trong báo cáo                                | Trạng thái | Ghi chú                                                                         |
-| ----------------------------------------------------- | ---------- | ------------------------------------------------------------------------------- |
-| Xem danh sách tòa nhà/POI, thêm, cập nhật, xóa        | ✅         | Có thêm quản lý **tầng/phòng** và tọa độ AR cục bộ                              |
-| Cập nhật tọa độ GPS và mô tả                          | ✅         | Kiểm tra tọa độ trong khoảng ±90/±180; `null` khác `0`                          |
-| Xem danh sách người dùng, lọc theo vai trò/trạng thái | ✅         | Phân trang và lọc ở server; bộ lọc lưu trên URL                                 |
-| Cập nhật tài khoản, khóa/mở khóa                      | ✅         | Có hộp thoại xác nhận khi đổi vai trò hoặc khóa                                 |
-| Xem danh sách câu hỏi, trả lời câu hỏi (include)      | ✅         | Thêm, sửa, xóa câu trả lời                                                      |
-| Quản lý danh mục câu hỏi                              | ✅         | Đếm số câu hỏi dùng danh mục trước khi xóa (Activity 4.8)                       |
-| Xuất báo cáo (PDF/CSV)                                | ✅ CSV     | Xuất tổng quan, người dùng, tòa nhà, câu hỏi, danh mục                          |
-| Xem thống kê điểm truy cập nhiều                      | ⚠️         | Backend chưa có endpoint; dashboard dùng 9 bộ đếm từ `/admin/dashboard/summary` |
-| Xem lịch sử lỗi, xem phản hồi                         | ❌         | Backend chưa có API (log lỗi/feedback)                                          |
-| Tạo tài khoản, xóa tài khoản người dùng               | ❌         | Backend chưa có API; UI dùng “Khóa tài khoản” thay cho xóa                      |
-| Trạng thái xử lý câu hỏi (Activity 4.7)               | ❌         | Backend không có trường status; UI không tự đặt ra                              |
-| Mô tả, thứ tự, trạng thái của danh mục (Activity 4.8) | ❌         | Backend chỉ có `name`                                                           |
-| Refresh token (AuthController, mục 5.7.1)             | ❌         | Không có endpoint refresh; token hết hạn thì đăng nhập lại                      |
+| Use case trong báo cáo                                | Trạng thái | Ghi chú                                                                                                             |
+| ----------------------------------------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------- |
+| Xem danh sách tòa nhà/POI, thêm, cập nhật, xóa        | ✅         | Có thêm quản lý **tầng/phòng** và tọa độ AR cục bộ                                                                  |
+| Cập nhật tọa độ GPS và mô tả                          | ✅         | Chọn trên bản đồ (ghim, khoanh vùng, tìm địa chỉ, GPS). Tọa độ AR của phòng được quy đổi ENU → Unity theo mục 2.1.4 |
+| Xem danh sách người dùng, lọc theo vai trò/trạng thái | ✅         | Phân trang và lọc ở server; bộ lọc lưu trên URL                                                                     |
+| Cập nhật tài khoản, khóa/mở khóa                      | ✅         | Có hộp thoại xác nhận khi đổi vai trò hoặc khóa                                                                     |
+| Xem danh sách câu hỏi, trả lời câu hỏi (include)      | ✅         | Thêm, sửa, xóa câu trả lời                                                                                          |
+| Quản lý danh mục câu hỏi                              | ✅         | Đếm số câu hỏi dùng danh mục trước khi xóa (Activity 4.8)                                                           |
+| Xuất báo cáo (PDF/CSV)                                | ✅ CSV     | Xuất tổng quan, người dùng, tòa nhà, câu hỏi, danh mục                                                              |
+| Xem thống kê điểm truy cập nhiều                      | ⚠️         | Backend chưa có endpoint; dashboard dùng 9 bộ đếm từ `/admin/dashboard/summary`                                     |
+| Xem lịch sử lỗi, xem phản hồi                         | ❌         | Backend chưa có API (log lỗi/feedback)                                                                              |
+| Tạo tài khoản, xóa tài khoản người dùng               | ❌         | Backend chưa có API; UI dùng “Khóa tài khoản” thay cho xóa                                                          |
+| Trạng thái xử lý câu hỏi (Activity 4.7)               | ❌         | Backend không có trường status; UI không tự đặt ra                                                                  |
+| Mô tả, thứ tự, trạng thái của danh mục (Activity 4.8) | ❌         | Backend chỉ có `name`                                                                                               |
+| Refresh token (AuthController, mục 5.7.1)             | ❌         | Không có endpoint refresh; token hết hạn thì đăng nhập lại                                                          |
 
 Các mục ❌ cần backend bổ sung API trước. Frontend cố ý không tạo endpoint giả.
 

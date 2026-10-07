@@ -1,6 +1,15 @@
-import { Building2, Download, Pencil, Plus, RefreshCw, Trash2 } from 'lucide-react';
+import {
+  Building2,
+  Download,
+  List,
+  Map as MapIcon,
+  Pencil,
+  Plus,
+  RefreshCw,
+  Trash2,
+} from 'lucide-react';
 import { useState } from 'react';
-import { Link } from 'react-router';
+import { Link, useSearchParams } from 'react-router';
 import { useConfirmedAction } from '@/components/feedback/useConfirmedAction';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
@@ -11,7 +20,9 @@ import { RowLink } from '@/components/ui/RowLink';
 import { Pagination } from '@/components/ui/Pagination';
 import { SearchBox } from '@/components/ui/SearchBox';
 import { QueryView } from '@/components/ui/states';
+import { BuildingsMap } from '@/features/map';
 import { useLocalTable } from '@/hooks/useLocalTable';
+import { cn } from '@/lib/cn';
 import { useI18n } from '@/i18n/context';
 import { datedFilename, downloadCsv } from '@/lib/csv';
 import { idOf } from '@/lib/utils';
@@ -30,6 +41,8 @@ export default function BuildingsPage() {
   const remove = useDeleteBuilding();
   const runConfirmed = useConfirmedAction();
   const [editing, setEditing] = useState<Editing>(null);
+  const [params, setParams] = useSearchParams();
+  const view = params.get('view') === 'map' ? 'map' : 'list';
 
   const exportCsv = () =>
     downloadCsv(datedFilename('buildings'), table.filtered, [
@@ -125,26 +138,60 @@ export default function BuildingsPage() {
         }
       />
       <Card>
-        <div className="border-b border-line p-5">
-          <SearchBox value={table.search} onChange={table.setSearch} />
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line p-5">
+          <div className="min-w-60 flex-1">
+            <SearchBox value={table.search} onChange={table.setSearch} />
+          </div>
+          <div
+            role="group"
+            aria-label={t('View')}
+            className="inline-flex rounded-xl border border-line bg-slate-50 p-1"
+          >
+            {(
+              [
+                ['list', 'List', List],
+                ['map', 'Map', MapIcon],
+              ] as const
+            ).map(([value, label, Icon]) => (
+              <button
+                key={value}
+                type="button"
+                aria-pressed={view === value}
+                onClick={() => setParams(value === 'map' ? { view: 'map' } : {})}
+                className={cn(
+                  'inline-flex h-8 items-center gap-1.5 rounded-lg px-3 text-[13px] font-medium',
+                  view === value
+                    ? 'bg-white text-brand-600 shadow-sm'
+                    : 'text-muted hover:text-ink',
+                )}
+              >
+                <Icon className="size-4" aria-hidden />
+                {t(label)}
+              </button>
+            ))}
+          </div>
         </div>
         <QueryView query={buildings}>
-          {() => (
-            <>
-              <DataTable
-                caption={t('Buildings')}
-                columns={columns}
-                rows={table.page.items}
-                rowKey={(b, i) => b.id ?? `row-${i}`}
-              />
-              <Pagination
-                page={table.page.page}
-                totalPages={table.page.totalPages}
-                totalItems={table.page.totalItems}
-                onPageChange={table.setPage}
-              />
-            </>
-          )}
+          {() =>
+            view === 'map' ? (
+              <BuildingsMap buildings={table.filtered} />
+            ) : (
+              <>
+                <DataTable
+                  caption={t('Buildings')}
+                  columns={columns}
+                  rows={table.page.items}
+                  rowKey={(b, i) => b.id ?? `row-${i}`}
+                />
+                <Pagination
+                  page={table.page.page}
+                  totalPages={table.page.totalPages}
+                  totalItems={table.page.totalItems}
+                  onPageChange={table.setPage}
+                />
+              </>
+            )
+          }
         </QueryView>
       </Card>
       <p className="mt-3 text-xs text-muted">

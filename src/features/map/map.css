@@ -1,0 +1,72 @@
+/* Tailwind preflight sets img { max-width: 100% } which breaks Leaflet tiles. */
+.leaflet-container img {
+  max-width: none !important;
+  max-height: none !important;
+}
+
+.leaflet-container {
+  font-family: inherit;
+  background: #eef0f6;
+}
+
+.leaflet-container.picking {
+  cursor: crosshair;
+}
+
+/* Pin markers (static HTML: never contains API data). */
+.map-pin {
+  position: relative;
+  display: block;
+  width: 26px;
+  height: 26px;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  border: 3px solid #fff;
+  box-shadow: 0 6px 14px -4px rgb(23 23 42 / 0.45);
+}
+
+.map-pin::after {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.map-pin--brand {
+  background: #7658df;
+}
+.map-pin--room {
+  background: #10b981;
+}
+.map-pin--selected {
+  background: #e11d48;
+}
+.map-pin--muted {
+  background: #94a3b8;
+}
+
+.map-dot {
+  display: block;
+  width: 14px;
+  height: 14px;
+  border-radius: 9999px;
+  border: 3px solid #fff;
+  box-shadow: 0 2px 6px rgb(23 23 42 / 0.4);
+}
+.map-dot--room {
+  background: #10b981;
+}
+.map-dot--muted {
+  background: #94a3b8;
+}
+
+.leaflet-tooltip.map-label {
+  padding: 2px 8px;
+  border: 0;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #22253b;
+  box-shadow: 0 2px 8px rgb(23 23 42 / 0.2);
+}

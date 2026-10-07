@@ -295,4 +295,55 @@ export const vi: Record<string, string> = {
   'Request failed.': 'Yêu cầu thất bại.',
   'Something went wrong. Please try again.': 'Đã xảy ra lỗi. Hãy thử lại.',
   'API record is missing its ID.': 'Bản ghi API thiếu ID.',
+
+  // Map & location picker
+  'Location on map': 'Vị trí trên bản đồ',
+  'Building point and estimated room positions (from AR local X/Z).':
+    'Điểm tòa nhà và vị trí ước tính của các phòng (từ tọa độ AR X/Z).',
+  'Move on map': 'Đổi vị trí trên bản đồ',
+  'Pick on map': 'Chọn trên bản đồ',
+  'No coordinates yet': 'Chưa có tọa độ',
+  'Pick the building on the campus map to set its latitude and longitude.':
+    'Chọn tòa nhà trên bản đồ khuôn viên để đặt vĩ độ và kinh độ.',
+  List: 'Danh sách',
+  Map: 'Bản đồ',
+  'Street map': 'Bản đồ',
+  Satellite: 'Vệ tinh',
+  'Street map (Esri)': 'Bản đồ (Esri)',
+  'Campus 1 · Ly Thuong Kiet': 'Cơ sở 1 · Lý Thường Kiệt',
+  'Campus 2 · Di An': 'Cơ sở 2 · Dĩ An',
+  'Drop pin': 'Ghim điểm',
+  'Draw area': 'Khoanh vùng',
+  'My location': 'Vị trí của tôi',
+  'Building origin': 'Gốc tòa nhà',
+  'Search an address or place': 'Tìm địa chỉ hoặc địa điểm',
+  'Search an address or place (e.g. Bach Khoa B4)': 'Tìm địa chỉ/địa điểm (vd: Bách Khoa B4)',
+  'No places found. Try another name or pick on the map.':
+    'Không tìm thấy địa điểm. Thử tên khác hoặc chọn trực tiếp trên bản đồ.',
+  'Address search is unavailable right now.':
+    'Hiện chưa tìm được địa chỉ. Hãy chọn trực tiếp trên bản đồ.',
+  'Click around the building outline. {count} points':
+    'Bấm lần lượt quanh viền tòa nhà. Đã chọn {count} điểm',
+  Undo: 'Hoàn tác',
+  'Use area centre': 'Lấy tâm vùng',
+  'Clear area': 'Xóa vùng',
+  'Click the map or drag the red pin. Coordinates are estimates — refine them on site if needed.':
+    'Bấm lên bản đồ hoặc kéo ghim đỏ. Tọa độ là ước tính — có thể chỉnh lại khi khảo sát thực tế.',
+  East: 'Đông',
+  North: 'Bắc',
+  'No point selected yet.': 'Chưa chọn điểm nào.',
+  'This browser cannot share its location.': 'Trình duyệt này không hỗ trợ lấy vị trí.',
+  'Location permission was denied or unavailable.':
+    'Không lấy được vị trí (bị từ chối quyền hoặc không khả dụng).',
+  'GPS accuracy is about {meters} m — adjust the pin if needed.':
+    'Độ chính xác GPS khoảng {meters} m — hãy chỉnh lại ghim nếu cần.',
+  '{count} buildings have no coordinates yet — open them and pick a point on the map.':
+    '{count} tòa nhà chưa có tọa độ — mở từng tòa nhà và chọn điểm trên bản đồ.',
+  'X · East (m)': 'X · Đông (m)',
+  'Y · Height (m)': 'Y · Độ cao (m)',
+  'Z · North (m)': 'Z · Bắc (m)',
+  'Set the building coordinates first to pick this room on the map.':
+    'Hãy đặt tọa độ cho tòa nhà trước để chọn vị trí phòng trên bản đồ.',
+  'Picking on the map fills X (east) and Z (north) in metres from the building point, using the ENU → Unity mapping of the report (§2.1.4). Y is the height and stays manual.':
+    'Chọn trên bản đồ sẽ điền X (hướng Đông) và Z (hướng Bắc) theo mét tính từ điểm tòa nhà, theo phép ánh xạ ENU → Unity trong báo cáo (mục 2.1.4). Y là độ cao, nhập tay.',
 };
